@@ -1,0 +1,10 @@
+*.?#?
+*~
+reference/
+data/
+scratchpad/
+local/
+temp/
+tmp/
+cache/
+.hg/
