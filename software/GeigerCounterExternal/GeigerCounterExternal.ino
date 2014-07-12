@@ -1,3 +1,5 @@
+const String fwver = "1.0.1";
+
 /*  
   A compatible logic level pulsed detector output from the Geiger counter is
   required and connected to Pin 3 (INT1) configured for rising edge interrupt
@@ -37,7 +39,6 @@ void setup() {
   // SD library requires Pin 10 as output, even if not used as CS:
   pinMode(10, OUTPUT);
   analogWrite( ledPin, 50 );
-  //delay( 1000 );
   
   if (!SD.begin(chipSelect)) {
     
