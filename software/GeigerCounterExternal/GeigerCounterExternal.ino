@@ -16,6 +16,8 @@ const String fwver = "1.0.1";
 #include <MsTimer2.h>
 #include <SD.h>
 
+#define filename "GEIGEREX.TXT"
+
 const int chipSelect = 10;
 const int ledPin = 9;
 const int vTempPin = 0;
@@ -26,7 +28,6 @@ volatile int crCount;
 File dataFile;
 float time;
 volatile boolean active;
-const String filename = "geigerex.txt";
 
 void setup() {
   
@@ -52,7 +53,7 @@ void setup() {
     
   }
   
-  dataFile = SD.open( "datalog.txt", FILE_WRITE );
+  dataFile = SD.open( filename, FILE_WRITE );
 
   Serial.println( "\n==== Counter Started =====\n" );
   Serial.print( "Count Window:" );Serial.print( deltaT / 1000.0, 3 );
@@ -63,7 +64,7 @@ void setup() {
     dataFile.println( "\n==== Counter Started =====\n" );
     dataFile.print( "Count Window:," );dataFile.print( deltaT / 1000.0, 3 );
     dataFile.println( ",sec\n" );
-    dataFile.println( "Window Start (sec), Counts, T (C)" );
+    dataFile.println( "Window Start (sec), Counts" ); //, T (C)" );
     dataFile.flush();
   }
 
@@ -87,13 +88,14 @@ void loop() {
 
   Serial.print( time, 3 );Serial.print( " sec: " );
   Serial.print( tempCount );Serial.print( " counts " );;
-  Serial.print( readTemp( vTempPin, 0 ) );Serial.println( " deg C");
-  
+  //Serial.print( readTemp( vTempPin, 0 ) );Serial.print( " deg C");
+  Serial.println("");
   if (dataFile) {
     
     dataFile.print( time, 3 );dataFile.print( ",");
     dataFile.print( tempCount );dataFile.print( ",");
-    dataFile.println( readTemp( vTempPin, 0 ) );
+    //dataFile.println( readTemp( vTempPin, 0 ) );
+    dataFile.println("");
     dataFile.flush();
     
   }  
@@ -123,7 +125,7 @@ float readTemp( int pin, int sensType ) {
   int refTempC[] = { 0, 0, 25 };
   float mVperDegC[] = { 6.25, 11.9, 10.0 };
 
-  int reading = analogRead(vTempPin);
+  int reading = analogRead(pin);
   float mVolts = reading * vRef / 1.024;
 
   return( ( mVolts - mVoltsAtRefTemp[sensType] ) / 
